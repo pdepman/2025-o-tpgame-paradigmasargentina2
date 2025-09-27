@@ -1,18 +1,25 @@
 import wollok.game.*
 
 import example.pepita
+import naves.*
 
-program PepitaGame {
-	game.title("Pepita")
-	game.height(10)
-	game.width(10)
+program JuegoNave {
+	game.title("juegoNave")
+	game.height(103)
+	game.width(154)
+	game.cellSize(10)
 
-	// add assets in asset folder, for example, for the background
-  // game.boardGround("fondo2.jpg")
+	game.boardGround("fondo.jpg")
 
-	//
+// nave con movimiento
+	game.addVisual(nave)
+	keyboard.right().onPressDo({nave.moverALaDerecha()})
+	keyboard.left().onPressDo({nave.moverALaIzquierda()})
+	keyboard.up().onPressDo({nave.moverArriba()})
+	keyboard.down().onPressDo({nave.moverAbajo()})
 
-	game.showAttributes(pepita) //Debug
+
+	game.showAttributes(nave) //Debug
 
 	game.start()
 }
