@@ -17,7 +17,7 @@ class Enemigo{
     }
 
     method initialize(){
-        game.whenCollideDo(self, {proyectil=> 
-        proyectil.destruir()})
+        game.whenCollideDo(self, {elemento=> 
+        elemento.choqueEnemigo()})
     }
 }

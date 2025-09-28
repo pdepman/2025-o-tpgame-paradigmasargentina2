@@ -50,6 +50,12 @@ object nave {
   method dispara(proyectil) {
     game.addVisual(proyectil)
   }
+
+  method choqueEnemigo(){
+    vida= vida-1
+  }
+
+  method disparado(){}
 }
 
 class Proyectil {
@@ -73,7 +79,13 @@ class Proyectil {
   method image() = "imagenEjemplo.png"
 
   method initialize(){
-        game.whenCollideDo(self, {enemigo=> 
-        enemigo.disparado()})
+        game.whenCollideDo(self, {elemento=> 
+        elemento.disparado()})
     }
+
+  method choqueEnemigo(){
+    self.destruir()
+  }
+
+
 }
