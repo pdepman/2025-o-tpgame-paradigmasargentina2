@@ -5,9 +5,9 @@ import naves.*
 
 program JuegoNave {
 	game.title("juegoNave")
-	game.height(103)
-	game.width(154)
-	game.cellSize(10)
+	game.height(20)
+	game.width(30)
+	game.cellSize(50)
 
 	game.boardGround("fondo.jpg")
 
@@ -17,6 +17,9 @@ program JuegoNave {
 	keyboard.left().onPressDo({nave.moverALaIzquierda()})
 	keyboard.up().onPressDo({nave.moverArriba()})
 	keyboard.down().onPressDo({nave.moverAbajo()})
+
+	//Con espacio se lanza proyectil
+	keyboard.space().onPressDo({nave.disparaProyectil()})
 
 
 	game.showAttributes(nave) //Debug
