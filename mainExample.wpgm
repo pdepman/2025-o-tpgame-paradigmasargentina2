@@ -2,6 +2,8 @@ import wollok.game.*
 
 import example.pepita
 import naves.*
+import enemigos.*
+
 
 program JuegoNave {
 	game.title("juegoNave")
@@ -21,6 +23,11 @@ program JuegoNave {
 	//Con espacio se lanza proyectil
 	keyboard.space().onPressDo({nave.disparaProyectil()})
 
+	const enemigo = new Enemigo()
+	game.addVisual(enemigo)
+	enemigo.initialize()
+
+	
 
 	game.showAttributes(nave) //Debug
 

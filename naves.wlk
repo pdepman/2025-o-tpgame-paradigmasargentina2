@@ -1,6 +1,18 @@
 object nave {
   var position = game.at(0, 0)
   
+  var property vida = 3
+
+  var puntaje = 0
+
+  var proyectilesActivos = []
+
+  method proyectilesActivos() = proyectilesActivos
+
+  method sumarPuntaje(puntos){
+    puntaje= puntaje+puntos
+  }
+
   method image() = "imagenEjemplo2.png"
   
   method position() = position
@@ -28,6 +40,8 @@ object nave {
   method disparaProyectil() {
     const nuevoProyectil =  new Proyectil(position = self.position().right(1))
     self.dispara(nuevoProyectil)
+    proyectilesActivos.add(nuevoProyectil)
+    nuevoProyectil.initialize()
     game.onTick(250, "hacia la derecha", { nuevoProyectil.moverALaDerecha() })
   }
   
@@ -41,13 +55,23 @@ class Proyectil {
   
   method position() = position
   
+  
   method position(nuevaPosition) {
     position = nuevaPosition
   }
   
+  method destruir(){
+    game.removeVisual(self)
+  }
+
   method moverALaDerecha() {
     position = position.right(1)
   }
   
   method image() = "imagenEjemplo.png"
+
+  method initialize(){
+        game.whenCollideDo(self, {enemigo=> 
+        enemigo.disparado()})
+    }
 }
