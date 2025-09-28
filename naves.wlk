@@ -5,6 +5,8 @@ object nave {
 
   var puntaje = 0
 
+  method puntaje()= puntaje
+
   var proyectilesActivos = []
 
   method proyectilesActivos() = proyectilesActivos
