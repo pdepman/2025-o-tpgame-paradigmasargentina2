@@ -1,37 +1,35 @@
 import wollok.game.*
-
 import example.pepita
 import naves.*
 import enemigos.*
 import interfaz.*
-
 
 program JuegoNave {
 	game.title("juegoNave")
 	game.height(20)
 	game.width(30)
 	game.cellSize(50)
-
+	
 	game.boardGround("fondo.jpg")
-
-// nave con movimiento
+	
+	// nave con movimiento
 	game.addVisual(nave)
-	keyboard.right().onPressDo({nave.moverALaDerecha()})
-	keyboard.left().onPressDo({nave.moverALaIzquierda()})
-	keyboard.up().onPressDo({nave.moverArriba()})
-	keyboard.down().onPressDo({nave.moverAbajo()})
-
+	keyboard.right().onPressDo({ nave.moverALaDerecha() })
+	keyboard.left().onPressDo({ nave.moverALaIzquierda() })
+	keyboard.up().onPressDo({ nave.moverArriba() })
+	keyboard.down().onPressDo({ nave.moverAbajo() })
+	
 	//Con espacio se lanza proyectil
-	keyboard.space().onPressDo({nave.disparaProyectil()})
-
+	keyboard.space().onPressDo({ nave.disparaProyectil() })
+	
+	
 	game.addVisual(puntaje)
 	const enemigo = new Enemigo()
 	game.addVisual(enemigo)
 	enemigo.initialize()
-
 	
-
+	
 	game.showAttributes(nave) //Debug
-
+	
 	game.start()
 }

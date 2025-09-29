@@ -1,5 +1,5 @@
 object nave {
-  var position = game.at(0, 0)
+  var position = game.at(0,10)
   
   var property vida = 3
 
