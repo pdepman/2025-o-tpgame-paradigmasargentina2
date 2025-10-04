@@ -1,3 +1,4 @@
+import powerUps.*
 object nave {
   var position = game.at(0,10)
   
@@ -15,7 +16,7 @@ object nave {
     puntaje= puntaje+puntos
   }
 
-  method image() = "imagenEjemplo2.png"
+  method image() = "nave.gif"
   
   method position() = position
   
@@ -56,6 +57,8 @@ object nave {
   }
 
   method disparado(){}
+
+  method initialize() {}
 }
 
 class Proyectil {
@@ -76,7 +79,7 @@ class Proyectil {
     position = position.right(1)
   }
   
-  method image() = "imagenEjemplo.png"
+  method image() = "proyectil1.gif"
 
   method initialize(){
         game.whenCollideDo(self, {elemento=> 

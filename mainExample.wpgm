@@ -3,6 +3,8 @@ import example.pepita
 import naves.*
 import enemigos.*
 import interfaz.*
+import powerUps.*
+
 
 program JuegoNave {
 	game.title("juegoNave")
@@ -14,6 +16,7 @@ program JuegoNave {
 	
 	// nave con movimiento
 	game.addVisual(nave)
+	nave.initialize()
 	keyboard.right().onPressDo({ nave.moverALaDerecha() })
 	keyboard.left().onPressDo({ nave.moverALaIzquierda() })
 	keyboard.up().onPressDo({ nave.moverArriba() })
@@ -39,7 +42,9 @@ program JuegoNave {
     	nuevoEnemigo.initialize()
   	} )
 */
-	game.showAttributes(nave) //Debug
-	
-	game.start()
+
+	//PowerUps Solo los genera cuando se pueda
+
+	game.onTick(5000, "spawnPowerUp", {powerUpGenerador.crearCuandoSeNecesite()})
+	game.start() 
 }
