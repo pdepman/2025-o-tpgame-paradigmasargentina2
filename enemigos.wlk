@@ -9,6 +9,7 @@ class Enemigo {
     29, 
     0.randomUpTo(20).truncate(0) // y random
   )
+  var seEscapo = false
 
   method vida() = vida
 
@@ -30,17 +31,19 @@ class Enemigo {
   method posicion(posicion){position = posicion}
 
   method destruirPorEscape() {
+    if (!seEscapo){
+      self.posicion(game.at(-1,-1)) //lo manda fuera de pantalla
+      // donde no colisiona con otros objetos
+      seEscapo = true
       nave.sumarPuntaje(-1)
-      game.removeTickEvent("a la izquierda")
       game.removeVisual(self)
       // remueve el "cuadrado invisible" que le quita vida a la nave
       // cuando el enemigo se destruye por escape
-      self.posicion(game.at(29,29))
-      game.removeVisual(self)
+    }
   }
  
   method moverALaIzquierda() {
-    if (position.x() > 0) {
+    if (position.x() != 0) {
         position = position.left(1)
     } else {
         self.destruirPorEscape()
