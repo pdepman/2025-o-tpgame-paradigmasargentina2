@@ -1,3 +1,4 @@
+// naves.wlk
 import powerUps.*
 object nave {
   var position = game.at(0,10)
@@ -57,7 +58,8 @@ object nave {
   }
 
   method choqueEnemigo(){
-    vida= vida-1
+    self.position(game.at(0,10))
+    vida = vida - 1
   }
 
   method disparado(){}

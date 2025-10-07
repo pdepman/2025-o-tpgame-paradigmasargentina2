@@ -30,7 +30,7 @@ program JuegoNave {
 	game.addVisual(puntaje)
 
 	//enemigos y dificultad
-	dificultadFacil.activar()	
+	dificultadFacil.activar()
 
 	//PowerUps Solo los genera cuando se pueda
 

@@ -27,10 +27,16 @@ class Enemigo {
     game.removeVisual(self)
   }
   
+  method posicion(posicion){position = posicion}
+
   method destruirPorEscape() {
-    nave.sumarPuntaje(-1) 
-    game.removeTickEvent("a la izquierda")
-    game.removeVisual(self)
+      nave.sumarPuntaje(-1)
+      game.removeTickEvent("a la izquierda")
+      game.removeVisual(self)
+      // remueve el "cuadrado invisible" que le quita vida a la nave
+      // cuando el enemigo se destruye por escape
+      self.posicion(game.at(29,29))
+      game.removeVisual(self)
   }
  
   method moverALaIzquierda() {
