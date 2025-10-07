@@ -15,7 +15,12 @@ class Enemigo {
 
   method bajarVida() {
     vida = vida - 1
-    if (vida < 1) {self.destruir()}
+    if (vida < 1) {
+      self.posicion(game.at(-1,-2))
+      // lo mueve a donde no interactua con otros objetos
+      // remueve el "cuadrado invisible" que le quita vida a la nave y detiene proyectiles
+      self.destruir()
+      }
   }
 
   method disparado() { 
@@ -37,8 +42,6 @@ class Enemigo {
       seEscapo = true
       nave.sumarPuntaje(-1)
       game.removeVisual(self)
-      // remueve el "cuadrado invisible" que le quita vida a la nave
-      // cuando el enemigo se destruye por escape
     }
   }
  
