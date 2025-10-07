@@ -10,6 +10,10 @@ object nave {
 
   var proyectilesActivos = []
 
+  var velocidadProyectil = 250
+
+  method velocidadProyectil() = velocidadProyectil
+
   method proyectilesActivos() = proyectilesActivos
 
   method sumarPuntaje(puntos){
@@ -45,7 +49,7 @@ object nave {
     self.dispara(nuevoProyectil)
     proyectilesActivos.add(nuevoProyectil)
     nuevoProyectil.initialize()
-    game.onTick(250, "hacia la derecha", { nuevoProyectil.moverALaDerecha() })
+    game.onTick(velocidadProyectil, "hacia la derecha", { nuevoProyectil.moverALaDerecha() })
   }
   
   method dispara(proyectil) {
@@ -63,9 +67,10 @@ object nave {
 
 class Proyectil {
   var position = game.at(0, 0)
+
+  var yaImpacto = false
   
   method position() = position
-  
   
   method position(nuevaPosition) {
     position = nuevaPosition
@@ -75,6 +80,9 @@ class Proyectil {
     game.removeVisual(self)
   }
 
+  // elimina el error cuando un proyectil esta sobre otro
+  method disparado() {}
+
   method moverALaDerecha() {
     position = position.right(1)
   }
@@ -82,8 +90,15 @@ class Proyectil {
   method image() = "proyectil1.gif"
 
   method initialize(){
+    //La vida del enemigo baja 1 punto por colision y no una cantidad
+    //equivalente al tiempo de contacto con el proyectil
+
         game.whenCollideDo(self, {elemento=> 
-        elemento.disparado()})
+        if (!yaImpacto){
+          elemento.disparado()
+          }
+          yaImpacto = true
+        })
     }
 
   method choqueEnemigo(){

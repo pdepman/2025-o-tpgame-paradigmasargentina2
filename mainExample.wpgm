@@ -4,6 +4,7 @@ import naves.*
 import enemigos.*
 import interfaz.*
 import powerUps.*
+import dificultades.*
 
 
 program JuegoNave {
@@ -25,26 +26,15 @@ program JuegoNave {
 	//Con espacio se lanza proyectil
 	keyboard.space().onPressDo({ nave.disparaProyectil() })
 	
-	//enemigos
-	
+	//puntaje
 	game.addVisual(puntaje)
-	const enemigo = new Enemigo(vida = 1,valor = 2,image = "imagenEjemplo.png")
-	game.addVisual(enemigo)
-	enemigo.initialize()
-	
-	const enemigoMasFuerte = new Enemigo(vida = 2,valor = 3,image = "imagenEjemplo3.png")
-	game.addVisual(enemigoMasFuerte)
-	enemigoMasFuerte.initialize()
- /* 
-	game.onTick(10000, "Nave nueva",{
-    	const nuevoEnemigo = new Enemigo(vida = 1, valor = 2, image = "imagenEjemplo.png")
-    	game.addVisual(nuevoEnemigo)
-    	nuevoEnemigo.initialize()
-  	} )
-*/
+
+	//enemigos y dificultad
+	dificultadFacil.activar()	
 
 	//PowerUps Solo los genera cuando se pueda
 
 	game.onTick(5000, "spawnPowerUp", {powerUpGenerador.crearCuandoSeNecesite()})
 	game.start() 
 }
+

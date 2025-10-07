@@ -41,4 +41,10 @@ class PowerUp {
         }
     })
     }
+
+    // elimina el error cuando un proyectil lo colisiona
+    method disparado(){}
+
+    // elimina el error cuando un enemigo lo colisiona
+    method choqueEnemigo(){}
 }
