@@ -114,6 +114,11 @@ object nave {
   method disparado(){}
 
   method initialize() {}
+
+  method resetPuntaje() { // lo uso en los tests
+    puntaje = 0
+  }
+
 }
 
 class Proyectil {

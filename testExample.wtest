@@ -1,4 +1,7 @@
 import example.pepita
+import naves.*
+import enemigos.*
+
 
 describe "group of tests for pepita" {
 
@@ -6,4 +9,28 @@ describe "group of tests for pepita" {
     assert.equals(100, pepita.energy())
   }
 
+}
+
+describe "Test para el puntaje del juego" {
+
+  
+
+  test "Cuando un enemigo sale de pantalla se resta puntaje" {
+
+    nave.resetPuntaje()
+    const enemigo = new EnemigoDebil()
+    enemigo.posicion(game.at(0,5)) // lo coloco al borde
+    
+    enemigo.moverALaIzquierda()    // debería activar destruirPorEscape()
+    
+    assert.equals(-1, nave.puntaje())
+    assert.equals(true,enemigo.seEscapo())
+  }
+
+  test "Cuando un enemigo es alcanzado por un proyectil Se suma puntaje" {
+    nave.resetPuntaje()
+    const enemigo = new EnemigoDebil()  // tiene valor = 1
+    enemigo.disparado()                 
+    assert.equals(1, nave.puntaje()) //suma 1 al puntaje
+  }
 }

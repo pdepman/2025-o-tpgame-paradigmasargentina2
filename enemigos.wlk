@@ -9,7 +9,7 @@ class Enemigo {
     29, 
     0.randomUpTo(20).truncate(0) // y random
   )
-  var seEscapo = false
+  var property seEscapo = false
 
   method vida() = vida
 
