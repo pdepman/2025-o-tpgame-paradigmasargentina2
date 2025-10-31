@@ -8,12 +8,12 @@ object puntaje{
 }
 
 // testeo de vida de la nave
-// object vida{
-//     method position()=game.at(5,5)
-//     method text() = "Puntaje: " + nave.vida()
-//     method choqueEnemigo(){}
-//     method disparado(){}
-// }
+object vida{
+    method position()=game.at(5,5)
+    method text() = "Vida: " + nave.vida()
+    method choqueEnemigo(){}
+    method disparado(){}
+}
 
 object nivel{
     method position() = game.at(1,1)
@@ -21,3 +21,4 @@ object nivel{
     method choqueEnemigo(){}
     method disparado(){}
 }
+

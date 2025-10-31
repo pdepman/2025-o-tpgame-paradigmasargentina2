@@ -111,7 +111,7 @@ object controlDeDificultad{
     var dificultadActual = nivel0
     var contadorDeNivel = 0
 
-    method init(){
+    method initialize(){
         dificultadActual.activar()
         self.obtenerPuntaje()
         self.subirAutomaticamenteDificultad()

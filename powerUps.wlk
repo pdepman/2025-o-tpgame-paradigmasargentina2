@@ -5,19 +5,59 @@ object powerUpGenerador {
     var property maxSimultaneos = 3
     var property activos = 0
     method posicionRandom() = game.at(
-    0.randomUpTo(30),        
-    0.randomUpTo(20)        
+    0.randomUpTo(5),    //30   test 
+    0.randomUpTo(20)        //20
     )
 
-    method crearAleatorio() { //Crea un p, de alguna de las clases power up, y suma uno activo
-    const pos = 0.randomUpTo(2).truncate(0) //Elige una posicion en base al random, siendo el 
-    const p = //Los crea en base al tipo
-        if (pos==0) new PowerUpDisparoTriple()
-        else if (pos==1) new PowerUpVida()
-        else new PowerUpInmortal() 
-    game.addVisual(p)
-    p.initialize()
-    activos=activos+1
+    const chanceDeAparicion = 100 // de 0% a 100%
+    const segundosDeAparicion = 3
+    // cada cuantos segundos puede aparecer un powerUp
+
+    method crearAleatorio(){
+        // Principal controlador de generacion de powerUps
+        // Cada cuantos segundos podria aparecer un powerUp
+        const segundos = segundosDeAparicion * 1000
+        game.onTick(segundos,"generar powerUp aleatoriamente",{
+            self.generacionMomentoAleatorio()
+        })
+    }
+
+    method generacionMomentoAleatorio(){
+        // Controlador de la chance de generacion
+        const chance = 0.randomUpTo(100)
+        if (chance >= 0 && chance <= chanceDeAparicion && self.puedeCrear()){
+            self.elegirPowerUp()
+            activos = activos + 1
+        } 
+    }
+
+    method elegirPowerUp(){
+        // Elige un powerUp aleatorio y lo crea entre los disponibles
+        // En la listaGeneradora se encuentra cada generador
+        const listaGeneradora = [
+            {self.crearVida()},
+            {self.crearDisparoTriple()}
+    ]
+        const cantidad = listaGeneradora.size()
+        const random = 0.randomUpTo(cantidad - 1)
+        listaGeneradora.get(random).apply()
+    }
+
+    method crearVida(){
+        // Crea un powerUp de vida
+        const powerUp = new PowerUpVida()
+        self.inicializarPowerUp(powerUp)
+    }
+
+    method crearDisparoTriple(){
+        const powerUp = new PowerUpDisparoTriple()
+        self.inicializarPowerUp(powerUp)
+    }
+
+    method inicializarPowerUp(powerUp){
+        game.addVisual(powerUp)
+        powerUp.initialize()
+
     }
 
     method puedeCrear() = activos < maxSimultaneos
@@ -31,9 +71,45 @@ object powerUpGenerador {
     }
 }
 
+object controladorDePowerUps{
+    
+    method initialize(){
+        self.inicializarDisparoTriple()
+    }
+
+    // disparo triple
+    method inicializarDisparoTriple(){
+        // Establece las condiciones para que funcione
+        // Se hace de esta manera y no sobre el powerUp disparo triple
+        // para no generar lag superponiendo condiciones del teclado
+        keyboard.space().onPressDo({self.dispararTripleProyectil()})
+
+    }
+
+    method condicionesDisparoTriple(){
+        return ( nave.powerUpActivo() == "disparo triple" &&
+            nave.hayPowerUpActivo())
+    }
+
+    method dispararTripleProyectil() {
+    if (self.condicionesDisparoTriple()){
+        const base = nave.position()
+        nave.dispararProyectil(base.up(1))
+        nave.dispararProyectil(base.down(1))   
+        }
+    }
+
+}
+
 class PowerUp {
     var property position = powerUpGenerador.posicionRandom()
     var recogido = false
+    const nombre
+    const tiempoSDeActividad = 0 // Duracion en segundos del powerUp
+    const identificadorUnico = 0.randomUpTo(100)
+
+    method tiempoSDeActividad() = tiempoSDeActividad * 1000
+    // tiempo en segundos
 
     method initialize() {
     game.whenCollideDo(self, { otro =>            
@@ -45,8 +121,10 @@ class PowerUp {
     }
 
     method recogidoPor(nave){ //Lo creo para que peuda psar parámetro nave y poder usarlo en aplciarEfecto, que lo hacen todos los powerups
-        self.aplicarEfecto(nave)
+        self.chequearPowerUpsNave(nave)
         powerUpGenerador.informeRecogido()
+        self.activar()
+        position = game.at(-2,-7)
         game.removeVisual(self)
     }
 
@@ -56,29 +134,74 @@ class PowerUp {
     // elimina el error cuando un enemigo lo colisiona
     method choqueEnemigo(){}
 
-    method aplicarEfecto(nave) {}
+    method efectoUnico(nave){}
+    // este metodo define la funcion de cada powerUp
+    // el powerUp se desactivara despues del tiempo indicado
+
+    method aplicarEfectoUnico(nave){
+        self.efectoUnico(nave)
+        self.actualizarEstadoNaveDesactivado(nave)
+    }
+
+    method identificadorUnico() = identificadorUnico
+
+    method actualizarEstadoNaveDesactivado(nave){
+        // Actualiza el estado de la nave
+        // luego de que se termina el tiempo de actividad del powerUp
+        game.onTick(self.tiempoSDeActividad(),"desactivar powerUp",{
+            nave.hayPowerUpActivo(false)
+            game.removeTickEvent("desactivar powerUp")
+        })
+
+    }
+
+    method chequearPowerUpsNave(nave){
+        //Revisa y actualiza el estado de powerups de la nave
+        //si ya tiene un powerUp activo lo reemplaza
+        if(nave.hayPowerUpActivo()){
+            nave.powerUpActivo(nombre)
+        }
+        else if(!nave.hayPowerUpActivo()){
+            nave.powerUpActivo(nombre)
+            nave.hayPowerUpActivo(true)
+        }
+    }
+
+    method activar(){
+        // self.aplicarEfectoConstante(nave)
+        self.aplicarEfectoUnico(nave)
+    }
+
+    method deberiaActivarse(nave){
+        return (nave.powerUpActivo() == nombre &&
+            nave.hayPowerUpActivo())
+    }
+
+
 }
 
-class PowerUpVida inherits PowerUp {
-    method image() = "imagenEjemplo2.png"
+class PowerUpVida inherits PowerUp(
+    nombre = "vida")
+{
+    method image() = "vida_p.png"
 
-    override method aplicarEfecto(nave) { //Reescribe los metodos de aplicar efecto y hjace loq ue deba en cada uno
+    override method efectoUnico(nave) { //Reescribe los metodos de aplicar efecto y hjace loq ue deba en cada uno
         nave.sumarVida(1)
     }
 }
 
-class PowerUpDisparoTriple inherits PowerUp {
-    method image() = "imagenEjemplo2.png"
-
-    override method aplicarEfecto(nave) {
-        nave.activarPowerUp("triple",5000)
-    }
+class PowerUpDisparoTriple inherits PowerUp(
+    nombre = "disparo triple",
+    tiempoSDeActividad = 5
+) {
+    method image() = "triple_p.png"
+    // powerUp configurado con el controladorDePowerUps
 }
 
 class PowerUpInmortal inherits PowerUp {
-    method image() = "imagenEjemplo2.png"
+    method image() = "inmortal_p.png"
 
-    override method aplicarEfecto(nave) {
-        nave.activarPowerUp("inmortal",5000)
+    override method efectoUnico(nave) {
+        //no hace nada todavia
     }
 }

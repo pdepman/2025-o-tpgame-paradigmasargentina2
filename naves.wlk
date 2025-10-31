@@ -1,4 +1,3 @@
-// naves.wlk
 import powerUps.*
 object nave {
   var position = game.at(0,10)
@@ -13,38 +12,33 @@ object nave {
     vida += cant 
   }
 
+  method vida() = vida
+
   var proyectilesActivos = []
 
   var velocidadProyectil = 250
 
   var contDisparos = 0
 
-//PowerUps Creo para poder administrar estado
+  var powerUpActivo = null
   
-  var inmortalActivo = false
-  var tripleActivo = false
-
-  method activarPowerUp(tipo, tiempons) { //Activa el powerup depdniendo de cual es, activando su estado
-    if (tipo == "inmortal") { inmortalActivo = true }
-    else if (tipo == "triple") { tripleActivo = true }
-    game.onTick(tiempons, "fin_" + tipo, { self.desactivarPowerUp(tipo) })
-  }
-
-  method desactivarPowerUp(tipo) {
-    if (tipo == "inmortal") { inmortalActivo = false }
-    else if (tipo == "triple") { tripleActivo = false }
-    game.removeTickEvent("fin_" + tipo)
-  }  
-
-  method estaActivo(tipo) {
-    if (tipo == "inmortal") inmortalActivo
-    else if (tipo == "triple") tripleActivo
-    else false
-  }
+  var hayPowerUpActivo = false
 
   method proximoIdTick() { //Creo apra que cada disparo tenga su propio id en el tick y no lo compartan
     contDisparos = contDisparos + 1
     return "proy_" + contDisparos.toString()
+  }
+
+  method powerUpActivo(powerUp){
+    powerUpActivo = powerUp
+  }
+
+  method powerUpActivo() = powerUpActivo
+
+  method hayPowerUpActivo() = hayPowerUpActivo
+
+  method hayPowerUpActivo(estado){
+    hayPowerUpActivo = estado
   }
 
   method velocidadProyectil() = velocidadProyectil
@@ -80,8 +74,9 @@ object nave {
   }
   
   method disparaProyectil() { //Decide como disparar, dependiendo de si tiene powerup o no
-    if (tripleActivo) self.disparoTriple()
-    else self.dispararProyectil(self.position())
+    // if (tripleActivo) self.disparoTriple()
+    //else 
+    self.dispararProyectil(self.position())
   } 
 
   method dispararProyectil(posInicial) {
@@ -91,15 +86,6 @@ object nave {
     p.initialize()
     const id = self.proximoIdTick() //Crea los ontick en abse al nombre del proyectil
     game.onTick(velocidadProyectil, id, { p.moverALaDerecha() })
-  }
-
-  
-
-  method disparoTriple() {
-    const base = self.position()
-    self.dispararProyectil(base.up(1))
-    self.dispararProyectil(base)
-    self.dispararProyectil(base.down(1))
   }
 
   method dispara(proyectil) {
