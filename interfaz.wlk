@@ -1,3 +1,4 @@
+import dificultades.*
 import naves.*
 object puntaje{
     method position()=game.center()
@@ -13,3 +14,10 @@ object puntaje{
 //     method choqueEnemigo(){}
 //     method disparado(){}
 // }
+
+object nivel{
+    method position() = game.at(1,1)
+    method text() = "Nivel: " + controlDeDificultad.contadorDeNivel()
+    method choqueEnemigo(){}
+    method disparado(){}
+}

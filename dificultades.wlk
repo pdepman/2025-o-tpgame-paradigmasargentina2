@@ -1,3 +1,4 @@
+import naves.*
 import enemigos.*
 class Dificultad{
 
@@ -10,6 +11,7 @@ class Dificultad{
     const chanceEnemigosFaciles = 0
     const chanceEnemigosMedios = 0
     //const chanceEnemigosDificiles = 100 - (chanceEnemigosFaciles + chanceEnemigosMedios)
+    const puntajeParaSubirDificultad = 0
 
     method activar() {
         activa = true
@@ -20,6 +22,8 @@ class Dificultad{
         activa = false
         game.removeTickEvent("spawnearEnemigo")}
 
+    method estaActiva() = activa
+
     method subirDificultad(){
         self.desactivar()
         dificultadSuperior.activar()
@@ -29,6 +33,18 @@ class Dificultad{
         self.desactivar()
         dificultadInferior.activar()
     }
+
+    method subirDificultadSegunPuntaje(puntaje){
+        if (puntaje >= puntajeParaSubirDificultad){
+            self.subirDificultad()
+        }
+    }
+    
+    method puntajeParaSubirDificultad() = puntajeParaSubirDificultad
+
+    method dificultadSuperior() = dificultadSuperior
+
+    method dificultadInferior() = dificultadInferior
 
     method spawnearEnemigo(cadaTsegundos){
         const ticks = cadaTsegundos * 1000
@@ -57,23 +73,74 @@ class Dificultad{
 
 }
 
-const dificultadFacil = new Dificultad(
+const nivel0 = new Dificultad(
+    tiempoDeAparicionDeEnemigos = 10,
+    chanceEnemigosFaciles = 90,
+    chanceEnemigosMedios = 10,
+    dificultadSuperior = nivel1,
+    dificultadInferior = self,
+    puntajeParaSubirDificultad = 10)
+
+const nivel1 = new Dificultad(
     tiempoDeAparicionDeEnemigos = 5,
     chanceEnemigosFaciles = 80,
     chanceEnemigosMedios = 10,
-    dificultadSuperior = dificultadMedia,
-    dificultadInferior = self)
+    dificultadSuperior = nivel2,
+    dificultadInferior = nivel0,
+    puntajeParaSubirDificultad = 20)
 
-const dificultadMedia = new Dificultad(
+const nivel2 = new Dificultad(
     tiempoDeAparicionDeEnemigos = 4,
     chanceEnemigosFaciles = 50,
     chanceEnemigosMedios = 40,
-    dificultadSuperior = dificultadDificil,
-    dificultadInferior = dificultadFacil)
+    dificultadSuperior = nivel3,
+    dificultadInferior = nivel1,
+    puntajeParaSubirDificultad = 30)
 
-const dificultadDificil = new Dificultad(
+const nivel3 = new Dificultad(
     tiempoDeAparicionDeEnemigos = 4,
     chanceEnemigosFaciles = 30,
     chanceEnemigosMedios = 40,
     dificultadSuperior = self,
-    dificultadInferior = dificultadMedia)
+    dificultadInferior = nivel2,
+    puntajeParaSubirDificultad = 40)
+
+object controlDeDificultad{
+
+    var puntaje = 0
+    var dificultadActual = nivel0
+    var contadorDeNivel = 0
+
+    method init(){
+        dificultadActual.activar()
+        self.obtenerPuntaje()
+        self.subirAutomaticamenteDificultad()
+    }
+
+    method dificultadActual() = dificultadActual
+
+    method contadorDeNivel() = contadorDeNivel
+
+    method obtenerPuntaje(){
+        game.onTick(1,"leer puntaje de la nave", {puntaje = nave.puntaje()})
+    }
+
+    method subirAutomaticamenteDificultad(){
+        game.onTick(1,"subir dificultad segun puntaje",{self.subirYActualizarDificultad()})
+    }
+
+    method subirYActualizarDificultad(){
+        dificultadActual.subirDificultadSegunPuntaje(puntaje)
+        if(!dificultadActual.estaActiva()){
+            if(dificultadActual.dificultadSuperior().estaActiva()){
+                dificultadActual = dificultadActual.dificultadSuperior()
+                contadorDeNivel = contadorDeNivel + 1
+            }
+            else{
+                dificultadActual = dificultadActual.dificultadInferior()
+                contadorDeNivel = contadorDeNivel - 1
+            }
+        }
+    }
+
+}
