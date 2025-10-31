@@ -36,13 +36,15 @@ object powerUpGenerador {
         // En la listaGeneradora se encuentra cada generador
         const listaGeneradora = [
             {self.crearVida()},
-            {self.crearDisparoTriple()}
+            {self.crearDisparoTripleUnico()},
+            {self.crearInmortal()}
     ]
         const cantidad = listaGeneradora.size()
         const random = 0.randomUpTo(cantidad - 1)
         listaGeneradora.get(random).apply()
     }
 
+    // Generadores de powerUps
     method crearVida(){
         // Crea un powerUp de vida
         const powerUp = new PowerUpVida()
@@ -52,6 +54,17 @@ object powerUpGenerador {
     method crearDisparoTriple(){
         const powerUp = new PowerUpDisparoTriple()
         self.inicializarPowerUp(powerUp)
+    }
+
+    method crearDisparoTripleUnico(){
+        const powerUp = new PowerUpDisparoTripleUnico()
+        self.inicializarPowerUp(powerUp)
+    }
+
+    method crearInmortal(){
+        const powerUp = new PowerUpInmortal()
+        self.inicializarPowerUp(powerUp)
+
     }
 
     method inicializarPowerUp(powerUp){
@@ -71,35 +84,35 @@ object powerUpGenerador {
     }
 }
 
-object controladorDePowerUps{
+// object controladorDePowerUps{
     
-    method initialize(){
-        self.inicializarDisparoTriple()
-    }
+//     method initialize(){
+//         self.inicializarDisparoTriple()
+//     }
 
-    // disparo triple
-    method inicializarDisparoTriple(){
-        // Establece las condiciones para que funcione
-        // Se hace de esta manera y no sobre el powerUp disparo triple
-        // para no generar lag superponiendo condiciones del teclado
-        keyboard.space().onPressDo({self.dispararTripleProyectil()})
+//     // disparo triple
+//     method inicializarDisparoTriple(){
+//         // Establece las condiciones para que funcione
+//         // Se hace de esta manera y no sobre el powerUp disparo triple
+//         // para no generar lag superponiendo condiciones del teclado
+//         keyboard.space().onPressDo({self.dispararTripleProyectil()})
 
-    }
+//     }
 
-    method condicionesDisparoTriple(){
-        return ( nave.powerUpActivo() == "disparo triple" &&
-            nave.hayPowerUpActivo())
-    }
+//     method condicionesDisparoTriple(){
+//         return ( nave.powerUpActivo() == "disparo triple" &&
+//             nave.hayPowerUpActivo())
+//     }
 
-    method dispararTripleProyectil() {
-    if (self.condicionesDisparoTriple()){
-        const base = nave.position()
-        nave.dispararProyectil(base.up(1))
-        nave.dispararProyectil(base.down(1))   
-        }
-    }
+//     method dispararTripleProyectil() {
+//     if (self.condicionesDisparoTriple()){
+//         const base = nave.position()
+//         nave.dispararProyectil(base.up(1))
+//         nave.dispararProyectil(base.down(1))   
+//         }
+//     }
 
-}
+// }
 
 class PowerUp {
     var property position = powerUpGenerador.posicionRandom()
@@ -190,18 +203,40 @@ class PowerUpVida inherits PowerUp(
     }
 }
 
-class PowerUpDisparoTriple inherits PowerUp(
-    nombre = "disparo triple",
-    tiempoSDeActividad = 5
-) {
-    method image() = "triple_p.png"
-    // powerUp configurado con el controladorDePowerUps
-}
+// class PowerUpDisparoTriple inherits PowerUp(
+//     nombre = "disparo triple",
+//     tiempoSDeActividad = 5
+// ) {
+//     method image() = "triple_p.png"
+//     // powerUp configurado con el controladorDePowerUps
+// }
 
-class PowerUpInmortal inherits PowerUp {
+class PowerUpInmortal inherits PowerUp(
+    nombre = "inmortal"
+) {
     method image() = "inmortal_p.png"
 
     override method efectoUnico(nave) {
         //no hace nada todavia
     }
 }
+
+class PowerUpDisparoTripleUnico inherits PowerUp(
+    // se laguea menos que disparo triple
+    nombre = "disparo triple unico"){
+    method image() = "triple_p.png"
+
+    method dispararTriple(nave){
+        const base = nave.position()
+        nave.dispararProyectil(base.up(1))
+        nave.dispararProyectil(base.down(1))
+        nave.dispararProyectil(base)  
+        }
+
+    override method efectoUnico(nave){
+        self.dispararTriple(nave)
+    }
+
+}
+
+
