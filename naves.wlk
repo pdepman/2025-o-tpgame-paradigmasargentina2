@@ -6,6 +6,8 @@ object nave {
 
   var puntaje = 0
 
+  var activa = true
+
   method puntaje()= puntaje
 
   method sumarVida(cant) {
@@ -13,6 +15,16 @@ object nave {
   }
 
   method vida() = vida
+
+  method activar(){
+    activa = true
+  }
+
+  method desactivar(){
+    activa = false
+  }
+
+  method activa() = activa
 
   var proyectilesActivos = []
 
@@ -32,6 +44,8 @@ object nave {
   method powerUpActivo(powerUp){
     powerUpActivo = powerUp
   }
+
+  method remover() {}
 
   method powerUpActivo() = powerUpActivo
 
@@ -119,6 +133,10 @@ class Proyectil {
   }
   
   method destruir(){
+    game.removeVisual(self)
+  }
+
+  method remover(){
     game.removeVisual(self)
   }
 

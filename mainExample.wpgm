@@ -5,6 +5,7 @@ import enemigos.*
 import interfaz.*
 import powerUps.*
 import dificultades.*
+import pantallas.*
 
 
 program JuegoNave {
@@ -13,32 +14,7 @@ program JuegoNave {
 	game.width(30)
 	game.cellSize(50)
 	
-	game.boardGround("fondo.jpg")
-	
-	// nave con movimiento
-	game.addVisual(nave)
-	nave.initialize()
-	keyboard.right().onPressDo({ nave.moverALaDerecha() })
-	keyboard.left().onPressDo({ nave.moverALaIzquierda() })
-	keyboard.up().onPressDo({ nave.moverArriba() })
-	keyboard.down().onPressDo({ nave.moverAbajo() })
-	
-	//Con espacio se lanza proyectil
-	keyboard.space().onPressDo({ nave.disparaProyectil() })
-	
-	//puntaje
-	game.addVisual(puntaje)
-
-	//enemigos y dificultad
-	game.addVisual(nivel)
-
-	//vida
-	game.addVisual(vida)
-
-	//PowerUps Solo los genera cuando se pueda
-
-	game.onTick(5000, "spawnPowerUp", {powerUpGenerador.crearCuandoSeNecesite()})
-	game.start() 
-	controladorDePowerUps.initialize()
+	game.boardGround("fondo.jpg")	
+	game.start()
 }
 

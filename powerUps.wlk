@@ -51,10 +51,10 @@ object powerUpGenerador {
         self.inicializarPowerUp(powerUp)
     }
 
-    method crearDisparoTriple(){
-        const powerUp = new PowerUpDisparoTriple()
-        self.inicializarPowerUp(powerUp)
-    }
+    // method crearDisparoTriple(){
+    //     const powerUp = new PowerUpDisparoTriple()
+    //     self.inicializarPowerUp(powerUp)
+    // }
 
     method crearDisparoTripleUnico(){
         const powerUp = new PowerUpDisparoTripleUnico()
@@ -188,6 +188,10 @@ class PowerUp {
     method deberiaActivarse(nave){
         return (nave.powerUpActivo() == nombre &&
             nave.hayPowerUpActivo())
+    }
+
+    method remover(){
+        game.removeVisual(self)
     }
 
 

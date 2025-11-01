@@ -27,6 +27,10 @@ class Enemigo {
     self.bajarVida()
   }
 
+  method remover(){
+    game.removeVisual(self)
+  }
+
   // Lo destruye un proyectil
   method destruir() {
     nave.sumarPuntaje(valor)

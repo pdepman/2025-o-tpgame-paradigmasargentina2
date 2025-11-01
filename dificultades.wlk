@@ -117,6 +117,10 @@ object controlDeDificultad{
         self.subirAutomaticamenteDificultad()
     }
 
+    method definirDificultad(dificultad){
+        dificultadActual = dificultad
+    }
+
     method dificultadActual() = dificultadActual
 
     method contadorDeNivel() = contadorDeNivel
@@ -141,6 +145,20 @@ object controlDeDificultad{
                 contadorDeNivel = contadorDeNivel - 1
             }
         }
+    }
+
+    method desactivar(){
+        //Desactiva todas las dificultades
+        //Dejan de spawnear enemigos
+        game.removeTickEvent("subir dificultad segun puntaje")
+        game.removeTickEvent("leer puntaje de la nave")
+        dificultadActual.desactivar()
+
+    }
+
+    method activar(){
+        self.definirDificultad(nivel0)
+        self.initialize()
     }
 
 }
