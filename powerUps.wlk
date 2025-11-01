@@ -1,3 +1,4 @@
+import interfaz.*
 import naves.*               
 import enemigos.*            
 
@@ -51,11 +52,6 @@ object powerUpGenerador {
         self.inicializarPowerUp(powerUp)
     }
 
-    // method crearDisparoTriple(){
-    //     const powerUp = new PowerUpDisparoTriple()
-    //     self.inicializarPowerUp(powerUp)
-    // }
-
     method crearDisparoTripleUnico(){
         const powerUp = new PowerUpDisparoTripleUnico()
         self.inicializarPowerUp(powerUp)
@@ -83,37 +79,6 @@ object powerUpGenerador {
         activos = activos - 1
     }
 }
-
-// object controladorDePowerUps{
-    
-//     method initialize(){
-//         self.inicializarDisparoTriple()
-//     }
-
-//     // disparo triple
-//     method inicializarDisparoTriple(){
-//         // Establece las condiciones para que funcione
-//         // Se hace de esta manera y no sobre el powerUp disparo triple
-//         // para no generar lag superponiendo condiciones del teclado
-//         keyboard.space().onPressDo({self.dispararTripleProyectil()})
-
-//     }
-
-//     method condicionesDisparoTriple(){
-//         return ( nave.powerUpActivo() == "disparo triple" &&
-//             nave.hayPowerUpActivo())
-//     }
-
-//     method dispararTripleProyectil() {
-//     if (self.condicionesDisparoTriple()){
-//         const base = nave.position()
-//         nave.dispararProyectil(base.up(1))
-//         nave.dispararProyectil(base.down(1))   
-//         }
-//     }
-
-// }
-
 class PowerUp {
     var property position = powerUpGenerador.posicionRandom()
     var recogido = false
@@ -156,14 +121,18 @@ class PowerUp {
         self.actualizarEstadoNaveDesactivado(nave)
     }
 
+    method estadoDeDesactivacion(){}
+    //alguna condicion extra que se deba cumplir
+    //para desactivar un powerUp
+
     method identificadorUnico() = identificadorUnico
 
     method actualizarEstadoNaveDesactivado(nave){
         // Actualiza el estado de la nave
         // luego de que se termina el tiempo de actividad del powerUp
-        game.onTick(self.tiempoSDeActividad(),"desactivar powerUp",{
+        game.schedule(self.tiempoSDeActividad(),{
+            self.estadoDeDesactivacion()
             nave.hayPowerUpActivo(false)
-            game.removeTickEvent("desactivar powerUp")
         })
 
     }
@@ -216,12 +185,19 @@ class PowerUpVida inherits PowerUp(
 // }
 
 class PowerUpInmortal inherits PowerUp(
-    nombre = "inmortal"
+    nombre = "inmortal",
+    tiempoSDeActividad = 5
 ) {
     method image() = "inmortal_p.png"
 
     override method efectoUnico(nave) {
-        //no hace nada todavia
+        nave.activarModoInmortal()
+        nave.imagen("naveInmortal.gif")
+    }
+
+    override method estadoDeDesactivacion(){
+        nave.desactivarModoInmortal()
+        nave.imagen("nave.gif")
     }
 }
 

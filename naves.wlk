@@ -1,12 +1,14 @@
 import powerUps.*
 object nave {
   var position = game.at(0,10)
-  
+  var property image = "nave.gif"
   var property vida = 3
 
   var puntaje = 0
 
   var activa = true
+
+  var inmortalidad = false
 
   method puntaje()= puntaje
 
@@ -22,6 +24,10 @@ object nave {
 
   method desactivar(){
     activa = false
+  }
+
+  method imagen(imagenNueva){
+    image = imagenNueva
   }
 
   method activa() = activa
@@ -62,8 +68,6 @@ object nave {
   method sumarPuntaje(puntos){
     puntaje= puntaje+puntos
   }
-
-  method image() = "nave.gif"
 
   method reiniciarPuntuacion(){
     puntaje = 0
@@ -111,8 +115,10 @@ object nave {
   }
 
   method choqueEnemigo(){
-    self.position(game.at(0,10))
-    vida = vida - 1
+    if (!inmortalidad){
+      self.position(game.at(0,10))
+      vida = vida - 1
+    }
   }
 
   method disparado(){}
@@ -123,6 +129,15 @@ object nave {
 
   method resetPuntaje() { // lo uso en los tests
     puntaje = 0
+  }
+
+  method activarModoInmortal(){
+    // la nave no puede perder vida
+    inmortalidad = true
+  }
+
+  method desactivarModoInmortal(){
+    inmortalidad = false
   }
 
 }

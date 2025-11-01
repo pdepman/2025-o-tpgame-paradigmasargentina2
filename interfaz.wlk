@@ -88,3 +88,4 @@ object flechita inherits ObjetoPantalla{
     }
 
 }
+
