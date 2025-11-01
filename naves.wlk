@@ -64,6 +64,10 @@ object nave {
   }
 
   method image() = "nave.gif"
+
+  method reiniciarPuntuacion(){
+    puntaje = 0
+  }
   
   method position() = position
   
@@ -113,7 +117,9 @@ object nave {
 
   method disparado(){}
 
-  method initialize() {}
+  method initialize() {
+    self.activar()
+  }
 
   method resetPuntaje() { // lo uso en los tests
     puntaje = 0

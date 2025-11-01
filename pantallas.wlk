@@ -16,8 +16,8 @@ object pantallaDeJuego{
         nave.initialize()
         keyboard.right().onPressDo({ nave.moverALaDerecha() })
         keyboard.left().onPressDo({ nave.moverALaIzquierda() })
-        keyboard.up().onPressDo({ nave.moverArriba() })
-        keyboard.down().onPressDo({ nave.moverAbajo() })
+        keyboard.up().onPressDo({ flechaArriba.init() })
+        keyboard.down().onPressDo({ flechaAbajo.init() })
 
         //Con espacio se lanza proyectil
         keyboard.space().onPressDo({espacio.init()})
@@ -50,9 +50,10 @@ object pantallaDeJuego{
     method activar(){
         nave.activar()
         game.onTick(5000, "spawnPowerUp", {powerUpGenerador.crearCuandoSeNecesite()})
+        nave.reiniciarPuntuacion()        
         controlDeDificultad.activar()
-
     }
+
 }
 
 object gameOver{
@@ -72,11 +73,14 @@ object gameOver{
     method activar(){
         game.addVisual(self)
         activa = true
+        self.agregarElementos()
+        
     }
 
     method desactivar(){
         game.removeVisual(self)
         activa = false
+        self.removerElementos()
     }
 
     method remover(){}
@@ -88,10 +92,34 @@ object gameOver{
             if(nave.vida()<=0 && !self.activa()){
                 self.activar()
                 pantallaDeJuego.desactivar()
+                game.removeTickEvent("chequear estado de la nave")
             }
         })
 
     }
+
+    method agregarElementos(){
+        // Agrega los elementos que acompañan
+        // la pantalla
+        reintentar.agregar()
+        otraOpcion.agregar()
+        flechita.agregar()
+    }
+
+    method removerElementos(){
+        reintentar.remover()
+        otraOpcion.remover()
+        flechita.remover()
+    }
+
+    method reintentar(){
+        // reinicio desde gameover
+        self.desactivar()
+        pantallaDeJuego.activar()
+        nave.sumarVida(3)
+        self.activarAutomaticamente()
+    }
+    
 
 }
 // object limpiarPantalla{

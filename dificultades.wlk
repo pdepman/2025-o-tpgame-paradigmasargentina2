@@ -79,7 +79,7 @@ const nivel0 = new Dificultad(
     chanceEnemigosMedios = 10,
     dificultadSuperior = nivel1,
     dificultadInferior = self,
-    puntajeParaSubirDificultad = 10)
+    puntajeParaSubirDificultad = 1)
 
 const nivel1 = new Dificultad(
     tiempoDeAparicionDeEnemigos = 5,
@@ -121,6 +121,11 @@ object controlDeDificultad{
         dificultadActual = dificultad
     }
 
+    method reiniciarContadores(){
+        contadorDeNivel = 0
+        puntaje = 0
+    }
+
     method dificultadActual() = dificultadActual
 
     method contadorDeNivel() = contadorDeNivel
@@ -158,7 +163,9 @@ object controlDeDificultad{
 
     method activar(){
         self.definirDificultad(nivel0)
+        self.reiniciarContadores()
         self.initialize()
+
     }
 
 }
