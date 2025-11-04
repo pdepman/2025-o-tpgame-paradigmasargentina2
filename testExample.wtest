@@ -1,3 +1,4 @@
+import pantallas.*
 import example.pepita
 import naves.*
 import enemigos.*
@@ -33,4 +34,5 @@ describe "Test para el puntaje del juego" {
     enemigo.disparado()                 
     assert.equals(1, nave.puntaje()) //suma 1 al puntaje
   }
+
 }

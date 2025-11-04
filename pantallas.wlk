@@ -10,17 +10,13 @@ import teclas.*
 object pantallaDeJuego{
     // funciones de la pantalla de juego
 
+    var activa = false
+
     method initialize(){
         // nave con movimiento
+        activa = true
         game.addVisual(nave)
         nave.initialize()
-        keyboard.right().onPressDo({ nave.moverALaDerecha() })
-        keyboard.left().onPressDo({ nave.moverALaIzquierda() })
-        keyboard.up().onPressDo({ flechaArriba.init() })
-        keyboard.down().onPressDo({ flechaAbajo.init() })
-
-        //Con espacio se lanza proyectil
-        keyboard.space().onPressDo({espacio.init()})
            
         //puntaje
         game.addVisual(puntaje)
@@ -38,9 +34,12 @@ object pantallaDeJuego{
 
     }
 
+    method activa() = activa
+
     method desactivar(){
         // la nave no dispara mas proyectiles
         // no spawnean mas enemigos ni powerups
+        activa = false
         nave.desactivar()
         game.removeTickEvent("spawnPowerUp")
         controlDeDificultad.desactivar()
@@ -48,9 +47,9 @@ object pantallaDeJuego{
     }
 
     method activar(){
+        activa = true
         nave.activar()
         game.onTick(5000, "spawnPowerUp", {powerUpGenerador.crearCuandoSeNecesite()})
-        nave.reiniciarPuntuacion()        
         controlDeDificultad.activar()
     }
 
@@ -78,8 +77,8 @@ object gameOver{
     }
 
     method desactivar(){
-        game.removeVisual(self)
         activa = false
+        game.removeVisual(self)
         self.removerElementos()
     }
 
@@ -116,7 +115,6 @@ object gameOver{
         // reinicio desde gameover
         self.desactivar()
         pantallaDeJuego.activar()
-        nave.sumarVida(3)
         self.activarAutomaticamente()
     }
     
@@ -133,3 +131,12 @@ object gameOver{
 //     }
 
 // }
+
+object controlDePantallas{
+
+    method desactivarTodas(){
+        pantallaDeJuego.desactivar()
+        gameOver.desactivar()
+    }
+
+}

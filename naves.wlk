@@ -3,6 +3,7 @@ object nave {
   var position = game.at(0,10)
   var property image = "nave.gif"
   var property vida = 3
+  const vidaInicial = 3
 
   var puntaje = 0
 
@@ -18,7 +19,13 @@ object nave {
 
   method vida() = vida
 
+  method vida(valor){
+    vida = valor
+  }
+
   method activar(){
+    self.reiniciarPuntuacion()
+    self.reiniciarVida()
     activa = true
   }
 
@@ -125,6 +132,8 @@ object nave {
 
   method initialize() {
     self.activar()
+    self.reiniciarPuntuacion()
+    self.reiniciarVida()
   }
 
   method resetPuntaje() { // lo uso en los tests
@@ -138,6 +147,10 @@ object nave {
 
   method desactivarModoInmortal(){
     inmortalidad = false
+  }
+
+  method reiniciarVida(){
+    vida = vidaInicial
   }
 
 }
