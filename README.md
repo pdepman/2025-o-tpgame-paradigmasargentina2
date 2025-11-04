@@ -24,7 +24,10 @@ UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 
 ## Explicaciones teóricas y diagramas
 
-- Completar Link a .md
+- Completar Link a .md (falta hacerlo como .md)
+
+<img width="792" height="624" alt="{8882975E-012E-4154-953C-EFEF452ADA6C}" src="https://github.com/user-attachments/assets/199cca79-e5a4-4fe1-92dd-017bc6a574f7" />
+
 
 
 
