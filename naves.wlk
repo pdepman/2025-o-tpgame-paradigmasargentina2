@@ -7,6 +7,10 @@ object nave {
 
   var puntaje = 0
 
+  method modificarPuntaje(valorNuevo) {
+    puntaje=valorNuevo
+  }
+
   var activa = true
 
   var inmortalidad = false
@@ -18,6 +22,8 @@ object nave {
   }
 
   method vida() = vida
+
+  method vidaInicial() = vidaInicial 
 
   method vida(valor){
     vida = valor
@@ -168,6 +174,7 @@ class Proyectil {
   
   method destruir(){
     game.removeVisual(self)
+    nave.proyectilesActivos().remove(self)
   }
 
   method remover(){

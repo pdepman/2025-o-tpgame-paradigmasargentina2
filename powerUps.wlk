@@ -5,6 +5,9 @@ import enemigos.*
 object powerUpGenerador {
     var property maxSimultaneos = 3
     var property activos = 0
+
+    method activos() = activos
+
     method posicionRandom() = game.at(
     0.randomUpTo(5),    //30   test 
     0.randomUpTo(20)        //20

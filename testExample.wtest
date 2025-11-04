@@ -1,7 +1,13 @@
+import interfaz.*
 import pantallas.*
 import example.pepita
 import naves.*
 import enemigos.*
+import powerUps.*
+import dificultades.*
+import teclas.*
+
+
 
 
 describe "group of tests for pepita" {
@@ -12,27 +18,100 @@ describe "group of tests for pepita" {
 
 }
 
+const enemigoDebil = new EnemigoDebil()
+const enemigoFuerte = new EnemigoFuerte()
+const proyectil = new Proyectil()
+const powerUpInmortal = new PowerUpInmortal() 
+const powerUpVida = new PowerUpVida()
+const powerUpTriple = new PowerUpDisparoTripleUnico()
+
 describe "Test para el puntaje del juego" {
-
-  
-
   test "Cuando un enemigo sale de pantalla se resta puntaje" {
-
     nave.resetPuntaje()
-    const enemigo = new EnemigoDebil()
-    enemigo.posicion(game.at(0,5)) // lo coloco al borde
-    
-    enemigo.moverALaIzquierda()    // debería activar destruirPorEscape()
-    
+    enemigoDebil.posicion(game.at(0,5)) // lo coloco al borde
+    enemigoDebil.moverALaIzquierda()    // debería activar destruirPorEscape()
     assert.equals(-1, nave.puntaje())
-    assert.equals(true,enemigo.seEscapo())
+    assert.equals(true,enemigoDebil.seEscapo())
   }
 
   test "Cuando un enemigo es alcanzado por un proyectil Se suma puntaje" {
     nave.resetPuntaje()
-    const enemigo = new EnemigoDebil()  // tiene valor = 1
-    enemigo.disparado()                 
+    enemigoDebil.disparado()                 
     assert.equals(1, nave.puntaje()) //suma 1 al puntaje
   }
 
+  test "Al impactar con un enemigo, el proyectil desaparece" {
+    const antes = nave.proyectilesActivos().size()
+    nave.disparaProyectil()
+    const p = nave.proyectilesActivos().last()
+    p.choqueEnemigo()
+    assert.equals(antes, nave.proyectilesActivos().size())
+
+  }
+
+  test "Enemigo aguanta daño acorde a su dificultad" {
+    enemigoFuerte.disparado()
+    enemigoFuerte.disparado()
+    enemigoFuerte.disparado()
+    assert.equals(0, enemigoFuerte.vida())
+  }
+
+  test "Enemigo aporta puntahe de acuerdo a su dificultad" {
+    nave.resetPuntaje()
+    enemigoFuerte.destruir()
+    assert.equals(3, nave.puntaje())
+  }
+  test "Cuando toma un powerUp de inmortalidad, no recibe daño" {
+    powerUpInmortal.recogidoPor(nave)
+    nave.choqueEnemigo()
+    assert.equals(nave.vida(), nave.vidaInicial())
+  }
+
+  test "Cuando toma un powerUp de vida, se suma una vida" {
+    powerUpVida.recogidoPor(nave)
+    assert.equals(nave.vida(), nave.vidaInicial()+1)
+  }
+
+  test "Cuando se activa el powerUp triple, se dispara triple" {
+    const antes = nave.proyectilesActivos().size()
+    powerUpTriple.recogidoPor(nave)
+    assert.equals(antes+3, nave.proyectilesActivos().size())
+  }
+
+  test "Solo se crea PowerUp cuando se respete el limite" {
+    powerUpGenerador.generacionMomentoAleatorio()
+    powerUpGenerador.generacionMomentoAleatorio()
+    powerUpGenerador.generacionMomentoAleatorio()
+    assert.equals(false, powerUpGenerador.puedeCrear())
+  }
+
+  /*test "Un PowerUp de inmortalidad dura 5 segundos activo" {
+    powerUpInmortal.recogidoPor(nave)
+
+  }*/
+
+  test "Se sube la dificultad al alcanzar el puntaje" { //No se usan los onticks en el test, se supone que funciona igual
+    controlDeDificultad.reiniciarContadores()
+    controlDeDificultad.definirDificultad(nivel0)
+    controlDeDificultad.modificarPuntaje(1)
+    controlDeDificultad.subirYActualizarDificultad()
+    assert.equals(1, controlDeDificultad.contadorDeNivel())
+  }
+
+  test "Si el puntaje baja del limte para subir, no se baja la dificultad " {
+    controlDeDificultad.reiniciarContadores()
+    nivel1.activar()
+    controlDeDificultad.definirDificultad(nivel1)
+    controlDeDificultad.modificarPuntaje(0)
+    controlDeDificultad.subirYActualizarDificultad()
+    assert.equals(nivel1, controlDeDificultad.dificultadActual())
+  }
+
+  test "Si la pantalla de juego no esta activa, flechas de sleccion actuan distinto" {
+    nave.desactivar()
+    flechita.agregar()
+    const posAntes = nave.position()   
+    flechaAbajo.init()
+    assert.equals(posAntes,nave.position())
+  }
 }
