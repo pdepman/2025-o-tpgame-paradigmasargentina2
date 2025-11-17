@@ -2,8 +2,8 @@ import powerUps.*
 object nave {
   var position = game.at(0,10)
   var property image = "nave.gif"
-  var property vida = 3
-  const vidaInicial = 3
+  var property vida = 1
+  const vidaInicial = 1
 
   var puntaje = 0
 

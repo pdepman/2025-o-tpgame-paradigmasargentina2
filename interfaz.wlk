@@ -1,3 +1,4 @@
+// interfaz.wlk
 import powerUps.*
 import dificultades.*
 import naves.*
@@ -36,14 +37,14 @@ class ObjetoPantalla{
 }
 object reintentar inherits ObjetoPantalla{
 
-    method image() = "reintentar_p_go.png"
+    method image() = "reintentar_p_go_1.png"
     method position() = game.at(11,9)
     
 }
 
 object otraOpcion inherits ObjetoPantalla{
 
-    method image() = "otraopcion_p_go.png"
+    method image() = "inicio_p_go_1.png"
     method position() = game.at(11,7)
 
 }
@@ -54,7 +55,7 @@ object flechita inherits ObjetoPantalla{
     method image() = "nave.png" //imagen temporal
     var property position = game.at(10,9)
     const reintentar = game.at(10,9)
-    const otraOpcion = game.at(10,7)
+    const inicio = game.at(10,7)
 
     var activa = false
 
@@ -73,7 +74,7 @@ object flechita inherits ObjetoPantalla{
     method elegir(){
         // mueve la flechita entre las 2 opciones
         if(self.position() == reintentar){
-            position = otraOpcion
+            position = inicio
         }
         else{
             position = reintentar
@@ -85,7 +86,28 @@ object flechita inherits ObjetoPantalla{
         if(self.position() == reintentar){
             gameOver.reintentar()
         }
+        else if(self.position() == inicio){
+            gameOver.inicio()
+        }
     }
 
 }
 
+object jugar inherits ObjetoPantalla{
+
+    method image() = "jugar_p_i.png"
+    method position() = game.at(11,7)
+
+    var activa = false
+
+    method activar(){
+        activa = true
+    }
+
+    method desactivar(){
+        activa = false
+    }
+
+    method activa() = activa
+
+}

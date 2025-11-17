@@ -1,3 +1,4 @@
+// powerUps.wlk
 import interfaz.*
 import naves.*               
 import enemigos.*            
@@ -5,8 +6,19 @@ import enemigos.*
 object powerUpGenerador {
     var property maxSimultaneos = 3
     var property activos = 0
+    var property listaActivos =[]
 
     method activos() = activos
+
+    method listaActivos() = listaActivos
+
+    method agregarListaActivo(powerUp){
+        listaActivos.add(powerUp)
+    }
+
+    method removerListaActivo(powerUp){
+        listaActivos.remove(powerUp)
+    }
 
     method posicionRandom() = game.at(
     0.randomUpTo(5),    //30   test 
@@ -52,17 +64,21 @@ object powerUpGenerador {
     method crearVida(){
         // Crea un powerUp de vida
         const powerUp = new PowerUpVida()
+
         self.inicializarPowerUp(powerUp)
+        self.agregarListaActivo(powerUp)
     }
 
     method crearDisparoTripleUnico(){
         const powerUp = new PowerUpDisparoTripleUnico()
         self.inicializarPowerUp(powerUp)
+        self.agregarListaActivo(powerUp)
     }
 
     method crearInmortal(){
         const powerUp = new PowerUpInmortal()
         self.inicializarPowerUp(powerUp)
+        self.agregarListaActivo(powerUp)
 
     }
 
@@ -107,6 +123,7 @@ class PowerUp {
         self.activar()
         position = game.at(-2,-7)
         game.removeVisual(self)
+        powerUpGenerador.removerListaActivo(self)
     }
 
     // elimina el error cuando un proyectil lo colisiona
@@ -164,6 +181,7 @@ class PowerUp {
 
     method remover(){
         game.removeVisual(self)
+        powerUpGenerador.removerListaActivo(self)
     }
 
 
@@ -172,7 +190,7 @@ class PowerUp {
 class PowerUpVida inherits PowerUp(
     nombre = "vida")
 {
-    method image() = "vida_p.png"
+    method image() = "powerup_vida.png"
 
     override method efectoUnico(nave) { //Reescribe los metodos de aplicar efecto y hjace loq ue deba en cada uno
         nave.sumarVida(1)
@@ -191,7 +209,7 @@ class PowerUpInmortal inherits PowerUp(
     nombre = "inmortal",
     tiempoSDeActividad = 5
 ) {
-    method image() = "inmortal_p.png"
+    method image() = "powerup_inmunidad.png"
 
     override method efectoUnico(nave) {
         nave.activarModoInmortal()
@@ -207,7 +225,7 @@ class PowerUpInmortal inherits PowerUp(
 class PowerUpDisparoTripleUnico inherits PowerUp(
     // se laguea menos que disparo triple
     nombre = "disparo triple unico"){
-    method image() = "triple_p.png"
+    method image() = "powerup_triple.png"
 
     method dispararTriple(nave){
         const base = nave.position()

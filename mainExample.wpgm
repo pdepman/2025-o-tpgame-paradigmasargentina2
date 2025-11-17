@@ -16,5 +16,7 @@ program JuegoNave {
 	
 	game.boardGround("fondo.jpg")	
 	game.start()
+
+
 }
 

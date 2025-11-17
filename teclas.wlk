@@ -10,6 +10,9 @@ object espacio{
         else if(flechita.activa()){
             flechita.seleccionar()
         }
+        else if(inicio.activa()){
+            inicio.jugar()
+        }
     }
 }
 

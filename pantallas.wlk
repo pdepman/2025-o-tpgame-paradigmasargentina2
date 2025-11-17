@@ -12,26 +12,7 @@ object pantallaDeJuego{
 
     var activa = false
 
-    method initialize(){
-        // nave con movimiento
-        activa = true
-        game.addVisual(nave)
-        nave.initialize()
-           
-        //puntaje
-        game.addVisual(puntaje)
-
-        //enemigos y dificultad
-        game.addVisual(nivel)
-
-        //vida
-        game.addVisual(vida)
-
-        //PowerUps Solo los genera cuando se pueda
-
-        game.onTick(5000, "spawnPowerUp", {powerUpGenerador.crearCuandoSeNecesite()})
-        // controladorDePowerUps.initialize()
-
+    method initialize(){           
     }
 
     method activa() = activa
@@ -41,6 +22,7 @@ object pantallaDeJuego{
         // no spawnean mas enemigos ni powerups
         activa = false
         nave.desactivar()
+        self.removerElementos()
         game.removeTickEvent("spawnPowerUp")
         controlDeDificultad.desactivar()
         // limpiarPantalla.activar()
@@ -48,10 +30,28 @@ object pantallaDeJuego{
 
     method activar(){
         activa = true
+        // limpiar pantalla de enemigos y proyectiles
         nave.activar()
+        self.agregarElementos()
         game.onTick(5000, "spawnPowerUp", {powerUpGenerador.crearCuandoSeNecesite()})
         controlDeDificultad.activar()
     }
+
+    method agregarElementos(){
+	    game.addVisual(nave)
+        game.addVisual(puntaje)
+        game.addVisual(nivel)
+        game.addVisual(vida)
+
+    }
+
+    method removerElementos(){
+        game.removeVisual(nave)
+        game.removeVisual(puntaje)
+        game.removeVisual(nivel)
+        game.removeVisual(vida)
+    }
+
 
 }
 
@@ -59,21 +59,21 @@ object gameOver{
 
     var activa = false
 
-    method image() = "gameovergrande.png"
+    method image() = "gameover.png"
 
     var property position = game.at(0,0)
 
     method initialize(){
-        self.activarAutomaticamente()
     }
 
     method activa() = activa
 
     method activar(){
+        //limpiarPantalla.activar()
         game.addVisual(self)
         activa = true
         self.agregarElementos()
-        
+        pantallaDeJuego.desactivar()        
     }
 
     method desactivar(){
@@ -90,12 +90,13 @@ object gameOver{
         game.onTick(1,"chequear estado de la nave",{
             if(nave.vida()<=0 && !self.activa()){
                 self.activar()
-                pantallaDeJuego.desactivar()
                 game.removeTickEvent("chequear estado de la nave")
             }
         })
 
     }
+
+    method disparado(){}
 
     method agregarElementos(){
         // Agrega los elementos que acompañan
@@ -118,19 +119,53 @@ object gameOver{
         self.activarAutomaticamente()
     }
     
+    method inicio(){
+        self.desactivar()
+        inicio.activar()
+    }
 
 }
-// object limpiarPantalla{
 
-//     method image() = "transparente.png"
+object inicio{
 
-//     var property position = game.at(0,0)
+    var activa = false
 
-//     method activar(){
-//         game.whenCollideDo(self,{objeto => objeto.remover()})
-//     }
+    method image() = "pantalla_Inicio.png"
 
-// }
+    var property position = game.at(0,0)
+
+    method initialize(){
+        nave.desactivar()
+        game.addVisual(self)
+        activa = true
+        jugar.agregar()
+        gameOver.activarAutomaticamente()
+    }
+
+    method activa() = activa
+
+    method activar(){
+        game.addVisual(self)
+        activa = true
+        jugar.agregar() 
+    }
+
+    method desactivar(){
+        activa = false
+        jugar.remover()
+        game.removeVisual(self)
+    }
+
+    method jugar(){
+        self.desactivar()
+        pantallaDeJuego.activar()
+        gameOver.activarAutomaticamente()
+    }
+
+    method disparado(){}
+
+
+}
 
 object controlDePantallas{
 
@@ -140,3 +175,28 @@ object controlDePantallas{
     }
 
 }
+
+object limpiarPantalla{
+
+    method image() = "transparente.png"
+
+    var property position = game.at(1,0)
+
+    method position(x,y){
+        position = game.at(x,y)
+    }
+
+    method activar(){
+        nave.proyectilesActivos().forEach({
+            proyectil => proyectil.destruir()
+        })
+        controlDeDificultad.enemigosActivos().forEach({
+            enemigo => enemigo.remover()
+        })
+        powerUpGenerador.listaActivos().forEach({
+            powerUp => powerUp.remover()
+        })
+    }
+
+}
+

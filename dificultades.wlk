@@ -1,3 +1,5 @@
+// dificultades.wlk
+// dificultades.wlk
 import naves.*
 import enemigos.*
 class Dificultad{
@@ -60,14 +62,17 @@ class Dificultad{
         if ( 0 <= chance && chance <= chanceEnemigosFaciles) {
             const enemigo = new EnemigoDebil()
             game.addVisual(enemigo)
+            controlDeDificultad.agregarEnemigo(enemigo)
         }
         else if (chanceEnemigosFaciles < chance && chance <= limite){
                 const enemigo = new EnemigoMedio()
                 game.addVisual(enemigo)
+                controlDeDificultad.agregarEnemigo(enemigo)
         }
         else {
                 const enemigo = new EnemigoFuerte()
                 game.addVisual(enemigo)
+                controlDeDificultad.agregarEnemigo(enemigo)
         }   
     }
 
@@ -110,6 +115,18 @@ object controlDeDificultad{
     var puntaje = 0
     var dificultadActual = nivel0
     var contadorDeNivel = 0
+
+    var enemigosActivos = []
+
+    method enemigosActivos() = enemigosActivos
+
+    method agregarEnemigo(enemigo){
+        enemigosActivos.add(enemigo)
+    }
+
+    method removerEnemigo(enemigo){
+        enemigosActivos.remove(enemigo)
+    }
 
     method modificarPuntaje(nuevoPuntaje) {
         puntaje=nuevoPuntaje
@@ -171,5 +188,6 @@ object controlDeDificultad{
         self.initialize()
 
     }
+
 
 }

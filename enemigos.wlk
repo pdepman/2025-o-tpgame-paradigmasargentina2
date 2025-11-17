@@ -1,4 +1,5 @@
 import naves.*
+import dificultades.*
 class Enemigo {
   const image
   method image() = image
@@ -29,12 +30,14 @@ class Enemigo {
 
   method remover(){
     game.removeVisual(self)
+    controlDeDificultad.removerEnemigo(self)
   }
 
   // Lo destruye un proyectil
   method destruir() {
     nave.sumarPuntaje(valor)
     game.removeVisual(self)
+    controlDeDificultad.removerEnemigo(self)
   }
   
   method posicion(posicion){position = posicion}
@@ -46,6 +49,7 @@ class Enemigo {
       seEscapo = true
       nave.sumarPuntaje(-1)
       game.removeVisual(self)
+      controlDeDificultad.removerEnemigo(self)
     }
   }
  
