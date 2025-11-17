@@ -52,7 +52,7 @@ object otraOpcion inherits ObjetoPantalla{
 object flechita inherits ObjetoPantalla{
     // flechita seleccionadora
 
-    method image() = "nave.png" //imagen temporal
+    method image() = "flechita.png"
     var property position = game.at(10,9)
     const reintentar = game.at(10,9)
     const inicio = game.at(10,7)
