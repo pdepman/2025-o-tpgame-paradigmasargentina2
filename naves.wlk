@@ -173,11 +173,12 @@ class Proyectil {
   }
   
   method destruir(){
-    game.removeVisual(self)
+    self.remover()
     nave.proyectilesActivos().remove(self)
   }
 
   method remover(){
+    position = game.at(-3,-9)
     game.removeVisual(self)
   }
 

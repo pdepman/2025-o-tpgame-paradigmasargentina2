@@ -29,6 +29,7 @@ class Enemigo {
   }
 
   method remover(){
+    position = game.at(-3,-6)
     game.removeVisual(self)
     controlDeDificultad.removerEnemigo(self)
   }

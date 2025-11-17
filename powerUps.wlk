@@ -180,6 +180,7 @@ class PowerUp {
     }
 
     method remover(){
+        position = game.at(-3,-12)
         game.removeVisual(self)
         powerUpGenerador.removerListaActivo(self)
     }

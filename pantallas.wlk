@@ -70,6 +70,7 @@ object gameOver{
 
     method activar(){
         //limpiarPantalla.activar()
+        limpiarPantalla.activar()
         game.addVisual(self)
         activa = true
         self.agregarElementos()
@@ -178,14 +179,6 @@ object controlDePantallas{
 
 object limpiarPantalla{
 
-    method image() = "transparente.png"
-
-    var property position = game.at(1,0)
-
-    method position(x,y){
-        position = game.at(x,y)
-    }
-
     method activar(){
         nave.proyectilesActivos().forEach({
             proyectil => proyectil.destruir()
@@ -199,4 +192,29 @@ object limpiarPantalla{
     }
 
 }
+
+// class Invisible{
+
+//     var property position =  game.at(-1,0)
+
+//     method posicion(x,y) =  game.at(x,y)
+
+//     method initialize(){
+//         game.whenCollideDo(self,{
+//             objeto => objeto.remover()
+//             self.remover()
+//         })
+//     }
+
+//     method remover(){
+//         self.posicion(-3,-4)
+//         game.removeVisual(self)
+//     }
+
+//     method generarEn(x,y){
+//         const nuevo = new Invisible()
+//         nuevo.posicion(x,y)
+//     }
+
+// }
 
