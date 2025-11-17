@@ -42,6 +42,12 @@ class Dificultad{
         }
     }
     
+    method cantidadMaximaEnemigosAlcanzada(){
+        const cantEnemigos = controlDeDificultad.enemigosActivos().size()
+        const cantMaxima = 5
+        return cantEnemigos >= cantMaxima
+    }
+
     method puntajeParaSubirDificultad() = puntajeParaSubirDificultad
 
     method dificultadSuperior() = dificultadSuperior
@@ -58,22 +64,23 @@ class Dificultad{
 
     method spawnearSegunChance(chance){
         const limite = chanceEnemigosMedios + chanceEnemigosFaciles
-
-        if ( 0 <= chance && chance <= chanceEnemigosFaciles) {
-            const enemigo = new EnemigoDebil()
-            game.addVisual(enemigo)
-            controlDeDificultad.agregarEnemigo(enemigo)
-        }
-        else if (chanceEnemigosFaciles < chance && chance <= limite){
-                const enemigo = new EnemigoMedio()
+        if(!self.cantidadMaximaEnemigosAlcanzada()){
+            if ( 0 <= chance && chance <= chanceEnemigosFaciles) {
+                const enemigo = new EnemigoDebil()
                 game.addVisual(enemigo)
                 controlDeDificultad.agregarEnemigo(enemigo)
+            }
+            else if (chanceEnemigosFaciles < chance && chance <= limite){
+                    const enemigo = new EnemigoMedio()
+                    game.addVisual(enemigo)
+                    controlDeDificultad.agregarEnemigo(enemigo)
+            }
+            else {
+                    const enemigo = new EnemigoFuerte()
+                    game.addVisual(enemigo)
+                    controlDeDificultad.agregarEnemigo(enemigo)
+            }   
         }
-        else {
-                const enemigo = new EnemigoFuerte()
-                game.addVisual(enemigo)
-                controlDeDificultad.agregarEnemigo(enemigo)
-        }   
     }
 
 }
@@ -88,27 +95,27 @@ const nivel0 = new Dificultad(
 
 const nivel1 = new Dificultad(
     tiempoDeAparicionDeEnemigos = 5,
-    chanceEnemigosFaciles = 80,
-    chanceEnemigosMedios = 10,
+    chanceEnemigosFaciles = 50,
+    chanceEnemigosMedios = 50,
     dificultadSuperior = nivel2,
     dificultadInferior = nivel0,
-    puntajeParaSubirDificultad = 20)
+    puntajeParaSubirDificultad = 5)
 
 const nivel2 = new Dificultad(
     tiempoDeAparicionDeEnemigos = 4,
-    chanceEnemigosFaciles = 50,
+    chanceEnemigosFaciles = 20,
     chanceEnemigosMedios = 40,
     dificultadSuperior = nivel3,
     dificultadInferior = nivel1,
-    puntajeParaSubirDificultad = 30)
+    puntajeParaSubirDificultad = 10)
 
 const nivel3 = new Dificultad(
     tiempoDeAparicionDeEnemigos = 4,
-    chanceEnemigosFaciles = 30,
+    chanceEnemigosFaciles = 0,
     chanceEnemigosMedios = 40,
     dificultadSuperior = self,
     dificultadInferior = nivel2,
-    puntajeParaSubirDificultad = 40)
+    puntajeParaSubirDificultad = 150)
 
 object controlDeDificultad{
 

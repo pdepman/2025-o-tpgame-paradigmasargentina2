@@ -1,9 +1,10 @@
+// naves.wlk
 import powerUps.*
 object nave {
   var position = game.at(0,10)
   var property image = "nave.gif"
-  var property vida = 1
-  const vidaInicial = 1
+  var property vida = 3
+  const vidaInicial = 3
 
   var puntaje = 0
 
@@ -204,7 +205,7 @@ class Proyectil {
     }
 
   method choqueEnemigo(){
-    self.destruir()
+    game.schedule(50, {self.destruir()})
   }
 
 
