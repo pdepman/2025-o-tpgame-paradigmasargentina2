@@ -1,28 +1,32 @@
-// interfaz.wlk
 import powerUps.*
 import dificultades.*
 import naves.*
 import pantallas.*
 object puntaje{
-    method position()=game.center()
+    method position()= game.at(28,19)
     method text() = "Puntaje: " + nave.puntaje()
     method choqueEnemigo(){}
     method disparado(){}
+    method textColor() = "#ffffff"
 }
 
 // testeo de vida de la nave
 object vida{
-    method position()=game.at(5,5)
+    method position()=game.at(26,19)
     method text() = "Vida: " + nave.vida()
     method choqueEnemigo(){}
     method disparado(){}
+    method textColor() = "#ffffff"
+
 }
 
 object nivel{
-    method position() = game.at(1,1)
+    method position() = game.at(25,19)
     method text() = "Nivel: " + controlDeDificultad.contadorDeNivel()
     method choqueEnemigo(){}
     method disparado(){}
+    method textColor() = "#ffffff"
+
 }
 
 class ObjetoPantalla{
