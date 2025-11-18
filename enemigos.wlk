@@ -76,19 +76,19 @@ class Enemigo {
 }
 
 class EnemigoDebil inherits Enemigo(
-  image = "enemigoUno.png",
+  image = "naveEnemiga1.png",
   vida = 1,
   valor = 1
 ){}
 
 class EnemigoMedio inherits Enemigo(
-  image = "enemigoDos.png",
+  image = "naveEnemiga2.png",
   vida = 2,
   valor = 2
 ) {}
 
 class EnemigoFuerte inherits Enemigo(
-  image = "enemigoTres.png",
+  image = "naveEnemiga3.png",
   vida = 3,
   valor = 3
 ) {}
