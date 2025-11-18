@@ -1,18 +1,22 @@
 import wollok.game.*
-
 import example.pepita
+import naves.*
+import enemigos.*
+import interfaz.*
+import powerUps.*
+import dificultades.*
+import pantallas.*
 
-program PepitaGame {
-	game.title("Pepita")
-	game.height(10)
-	game.width(10)
 
-	// add assets in asset folder, for example, for the background
-  // game.boardGround("fondo2.jpg")
-
-	//
-
-	game.showAttributes(pepita) //Debug
-
+program JuegoNave {
+	game.title("juegoNave")
+	game.height(20)
+	game.width(30)
+	game.cellSize(50)
+	
+	game.boardGround("fondo.jpg")	
 	game.start()
+
+
 }
+
